@@ -2,8 +2,9 @@
 #include "table.h"
 #include <QPalette>
 #include <QLabel>
-
-
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <qapplication.h>
 
 
 Widget::Widget(QWidget *parent) :
@@ -21,6 +22,20 @@ Table *table = new Table (this);
 
 
 
+//Музыка
+m_Fon = new QMediaPlayer(this);          // Инициализация плеера
+m_PlaylistFon = new QMediaPlaylist(m_Fon);
+m_Fon->setPlaylist(m_PlaylistFon);
+//Плейлист относительный.
+m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - 8. Dirt.wav"));
+m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/Bones  Drip-133 - WeWillBeRightHere.wav"));
+m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/Bones  Dylan Ross - TheIvy.wav"));
+m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - Kale (Feat. Eddy Baker).mp3"));
+m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - PleaseHangUpAndTryAgain.wav"));
+m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - Sixteen.wav"));
+m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - TheHealingFields.mp3"));
+m_PlaylistFon->setPlaybackMode(QMediaPlaylist::Random );
+m_Fon->play();
 
 
 
@@ -99,21 +114,14 @@ PlusToScoreNow->setPalette(palette);
 PlusToScoreNow->setFont(font5);
 
 
-
-
-
-
-
-
-
-
-
 }
 
 
 
 void Widget::stepsChanged(int newSteps)
 {
+
+
     Steps->setText(QString::number(newSteps));
 }
 

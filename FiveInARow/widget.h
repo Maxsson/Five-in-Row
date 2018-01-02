@@ -4,7 +4,8 @@
 #include <QWidget>
 #include <QLabel>
 #include <QObject>
-
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 
 namespace Ui {
 class Widget;
@@ -26,9 +27,9 @@ private:
     QLabel *Score;
     QLabel *LabelScore;
     QLabel *PlusToScoreNow;
-    //QLabel *BackGroundImg;
     QLabel *RightImg;
-
+    QMediaPlayer * m_Fon;
+    QMediaPlaylist * m_PlaylistFon;
 
 
 
@@ -38,6 +39,9 @@ public  slots:
     void stepsChanged(int newSteps);
     void ScoreChanged(float newScore);
     void PlusToScoreNowChanged(float newPlusToScoreNow);
+
+
+
 
 };
 

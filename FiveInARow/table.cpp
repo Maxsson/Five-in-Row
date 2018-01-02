@@ -4,7 +4,8 @@
 #include <QDebug>
 #include <QTimer>
 #include <QEventLoop>
-
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 
 
 Table::Table(QWidget *parent):QTableWidget(parent)

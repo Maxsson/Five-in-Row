@@ -4,6 +4,8 @@
 #include <QMouseEvent>
 #include <Widget.h>
 #include <QObject>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 
 class Table: public QTableWidget
 {
