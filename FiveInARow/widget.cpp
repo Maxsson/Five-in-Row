@@ -22,8 +22,12 @@ Table *table = new Table (this);
 
 
 
+
+
+
+
 //Музыка
-m_Fon = new QMediaPlayer(this);          // Инициализация плеера
+m_Fon = new QMediaPlayer(this);
 m_PlaylistFon = new QMediaPlaylist(m_Fon);
 m_Fon->setPlaylist(m_PlaylistFon);
 //Плейлист относительный.
@@ -105,8 +109,8 @@ r=rand() % 255;
 g=rand() % 255;
 b=rand() % 255;
 }
-QBrush brush(QColor(r, g, b, 255));
-//QBrush brush(QColor(0, 250, 0, 255));
+//QBrush brush(QColor(r, g, b, 255));
+QBrush brush(QColor(0,0,255, 255));
 brush.setStyle(Qt::SolidPattern);
 palette.setBrush(QPalette::Active, QPalette::WindowText, brush);
 palette.setBrush(QPalette::Inactive, QPalette::WindowText, brush);

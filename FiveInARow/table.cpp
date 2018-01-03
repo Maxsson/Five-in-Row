@@ -6,7 +6,7 @@
 #include <QEventLoop>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
-
+#include <qapplication.h>
 
 Table::Table(QWidget *parent):QTableWidget(parent)
 {
@@ -34,10 +34,10 @@ horizontalHeader()->setDefaultSectionSize(70);
 setIconSize(QSize (65,65));
 
 
-QIcon iconB(":icon/1.png");
-QIcon iconR(":icon/2.png");
-QIcon iconY(":icon/3.png");
-
+QIcon iconB(":icon/11.png");
+QIcon iconR(":icon/10.png");
+QIcon iconP(":icon/13.png");
+QIcon iconG(":icon/12.png");
 
 //Подключение Ходов,Счета,"+",прибавление счета
 connect(this,&Table::ShowStep,(Widget*)this->parent(),&Widget::stepsChanged);
@@ -50,8 +50,8 @@ connect(this,&Table::ShowPlusToScoreNow,(Widget*)this->parent(),&Widget::PlusToS
 srand(time(NULL));
 
 
-//1- Синий; 2-Красный; 3-Желтый
-//-1,-2,-3, - удалить
+//11- Синий; 10-Красный; 13-Фиолетовый 12- Зеленый
+//-1,-2,-3,-4 - удалить
 //Инициализация таблицы
 
 
@@ -101,7 +101,7 @@ for (int i = 0; i < RowAndColumn; i++)
          &&((cell[i][j] != cell[i][j-1]) || (cell[i][j] != cell[i][j-2]) || (cell[i][j] != cell[i][j-3])))
         {
 
-            item->setIcon(iconY);
+            item->setIcon(iconP);
             item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
         }
          else   {
@@ -110,10 +110,23 @@ for (int i = 0; i < RowAndColumn; i++)
           }
 
     }
-  setItem( i, j, item );
+     else if (random == 4)
+      {
+            cell[i][j]=4;
+           if (((cell[i][j] != cell[i-1][j]) || (cell[i][j] != cell[i-2][j]) || (cell[i][j] != cell[i-3][j]))
+           &&((cell[i][j] != cell[i][j-1]) || (cell[i][j] != cell[i][j-2]) || (cell[i][j] != cell[i][j-3])))
+          {
 
+              item->setIcon(iconG);
+              item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+          }
+           else   {
+                cell[i][j]=0;
+               goto GO;
+            }
 
-
+      }
+     setItem( i, j, item );
     }
 
 }
@@ -123,9 +136,10 @@ for (int i = 0; i < RowAndColumn; i++)
 //Клик мыши и смена элементов(полная)
 void Table::mousePressEvent(QMouseEvent *event)
 {
-    QIcon iconB(":icon/1.png");
-    QIcon iconR(":icon/2.png");
-    QIcon iconY(":icon/3.png");
+    QIcon iconB(":icon/11.png");
+    QIcon iconR(":icon/10.png");
+    QIcon iconP(":icon/13.png");
+    QIcon iconG(":icon/12.png");
     int static color;
 
     QTableWidgetItem *item = new QTableWidgetItem();
@@ -142,8 +156,8 @@ void Table::mousePressEvent(QMouseEvent *event)
 
 
 
-                     QPixmap pixmapY = iconY.pixmap(QSize(55, 55));
-                    color = cell[Old_Row][Old_Column];//1-blue 2-Red 3-yellow
+                     //QPixmap pixmapY = iconY.pixmap(QSize(55, 55));
+                    color = cell[Old_Row][Old_Column];//1-blue 2-Red 3-purple
 
                     if(color  == 1) {
                         for(int a=65;a>55;a--){
@@ -165,8 +179,17 @@ void Table::mousePressEvent(QMouseEvent *event)
                     else if (color == 3)
                     {
                         for(int a=65;a>55;a--){
-                            QPixmap pixmapY = iconY.pixmap(QSize(a, a));
-                        item->setIcon(pixmapY);
+                            QPixmap pixmapP = iconP.pixmap(QSize(a, a));
+                        item->setIcon(pixmapP);
+                        item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+                        waitMS(15);
+                        }
+                    }
+                    else if (color == 4)
+                    {
+                        for(int a=65;a>55;a--){
+                            QPixmap pixmapG = iconG.pixmap(QSize(a, a));
+                        item->setIcon(pixmapG);
                         item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
                         waitMS(15);
                         }
@@ -192,12 +215,15 @@ void Table::mousePressEvent(QMouseEvent *event)
                }
                else if (color == 3)
                {
-                   item->setIcon(iconY);
+                   item->setIcon(iconP);
+                   item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+               }
+               else if (color == 4)
+               {
+                   item->setIcon(iconG);
                    item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
                }
                 setItem(Old_Row, Old_Column, item );
-
-
 
                QIcon icon1=this->item(Old_Row,Old_Column)->icon();
                this->item(Old_Row,Old_Column)->setIcon(itemchange->icon());
@@ -219,11 +245,6 @@ void Table::mousePressEvent(QMouseEvent *event)
                Old_Row=-1;
                Old_Column=-1;
                CheckFive();
-
-
-
-
-
             }
            else
            {
@@ -388,27 +409,411 @@ ShowPlusToScoreNow(PlusToScoreNow);
 
 void Table::animationWillBeDeleted(int i,int j,bool left,int N){
     HaveFiveOrMore=true;
-    QIcon iconBm(":icon/1--.png");
-    QIcon iconRm(":icon/2--.png");
-    QIcon iconYm(":icon/3--.png");
-    if(left==true){
-            if(cell[i][j] == 1 || cell[i][j] == -1){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconBm);item1->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));setItem( i+l, j, item1 ); cell[i+l][j]=-1;}}
-            if(cell[i][j] == 2 || cell[i][j] == -2){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconRm);item1->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));setItem( i+l, j, item1 );cell[i+l][j]=-2;}}
-            if(cell[i][j] == 3 || cell[i][j] == -3){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconYm);item1->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));setItem( i+l, j, item1 );cell[i+l][j]=-3;}}
-    }
-    else
+
+
+
+
+    int color = cell[i][j];
+
+
     {
-            if(cell[i][j] == 1 || cell[i][j] == -1){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconBm);item1->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));setItem( i, j+l, item1 );cell[i][j+l]=-1;}}
-            if(cell[i][j] == 2 || cell[i][j] == -2){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconRm);item1->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));setItem( i, j+l, item1 );cell[i][j+l]=-2;}}
-            if(cell[i][j] == 3 || cell[i][j] == -3){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconYm);item1->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));setItem( i, j+l, item1 );cell[i][j+l]=-3;}}
+        if(left==true)
+        {
+            if(color == 1 ||color == -1){
+                QIcon icon1(QApplication::applicationDirPath() +"./animation/2/1.png");
+                QIcon icon2(QApplication::applicationDirPath() +"./animation/2/2.png");
+                QIcon icon3(QApplication::applicationDirPath() +"./animation/2/3.png");
+                QIcon icon4(QApplication::applicationDirPath() +"./animation/2/4.png");
+                QIcon icon5(QApplication::applicationDirPath() +"./animation/2/5.png");
+                QIcon icon6(QApplication::applicationDirPath() +"./animation/2/6.png");
+                QIcon icon7(QApplication::applicationDirPath() +"./animation/2/7.png");
+                QIcon icon8(QApplication::applicationDirPath() +"./animation/2/8.png");
+                QIcon icon9(QApplication::applicationDirPath() +"./animation/2/9.png");
+                QIcon icon10(QApplication::applicationDirPath() +"./animation/2/10.png");
+                QIcon icon11(QApplication::applicationDirPath() +"./animation/2/11.png");
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon1); setItem( i+l, j, item1 );waitMS(10);cell[i+l][j]=-color;
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon2); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon3); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon4); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon5); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon6); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon7); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon8); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon9); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon10); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon11); setItem( i+l, j, item1 );waitMS(10);
+                }
+            }
+       else if(color == 2||color == -2){
+                QIcon icon1(QApplication::applicationDirPath() +"./animation/1/1.png");
+                QIcon icon2(QApplication::applicationDirPath() +"./animation/1/2.png");
+                QIcon icon3(QApplication::applicationDirPath() +"./animation/1/3.png");
+                QIcon icon4(QApplication::applicationDirPath() +"./animation/1/4.png");
+                QIcon icon5(QApplication::applicationDirPath() +"./animation/1/5.png");
+                QIcon icon6(QApplication::applicationDirPath() +"./animation/1/6.png");
+                QIcon icon7(QApplication::applicationDirPath() +"./animation/1/7.png");
+                QIcon icon8(QApplication::applicationDirPath() +"./animation/1/8.png");
+                QIcon icon9(QApplication::applicationDirPath() +"./animation/1/9.png");
+                QIcon icon10(QApplication::applicationDirPath() +"./animation/1/10.png");
+                QIcon icon11(QApplication::applicationDirPath() +"./animation/1/11.png");
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon1); setItem( i+l, j, item1 );waitMS(10);cell[i+l][j]=-color;
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon2); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon3); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon4); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon5); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon6); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon7); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon8); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon9); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon10); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon11); setItem( i+l, j, item1 );waitMS(10);
+                }
+            }
+       else if(color == 3||color == -3){
+                QIcon icon1(QApplication::applicationDirPath() +"./animation/4/1.png");
+                QIcon icon2(QApplication::applicationDirPath() +"./animation/4/2.png");
+                QIcon icon3(QApplication::applicationDirPath() +"./animation/4/3.png");
+                QIcon icon4(QApplication::applicationDirPath() +"./animation/4/4.png");
+                QIcon icon5(QApplication::applicationDirPath() +"./animation/4/5.png");
+                QIcon icon6(QApplication::applicationDirPath() +"./animation/4/6.png");
+                QIcon icon7(QApplication::applicationDirPath() +"./animation/4/7.png");
+                QIcon icon8(QApplication::applicationDirPath() +"./animation/4/8.png");
+                QIcon icon9(QApplication::applicationDirPath() +"./animation/4/9.png");
+                QIcon icon10(QApplication::applicationDirPath() +"./animation/4/10.png");
+                QIcon icon11(QApplication::applicationDirPath() +"./animation/4/11.png");
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon1); setItem( i+l, j, item1 );waitMS(10);cell[i+l][j]=-color;
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon2); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon3); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon4); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon5); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon6); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon7); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon8); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon9); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon10); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon11); setItem( i+l, j, item1 );waitMS(10);
+                }
+
+            }
+       else if(color == 4||color == -4){
+                QIcon icon1(QApplication::applicationDirPath() +"./animation/3/1.png");
+                QIcon icon2(QApplication::applicationDirPath() +"./animation/3/2.png");
+                QIcon icon3(QApplication::applicationDirPath() +"./animation/3/3.png");
+                QIcon icon4(QApplication::applicationDirPath() +"./animation/3/4.png");
+                QIcon icon5(QApplication::applicationDirPath() +"./animation/3/5.png");
+                QIcon icon6(QApplication::applicationDirPath() +"./animation/3/6.png");
+                QIcon icon7(QApplication::applicationDirPath() +"./animation/3/7.png");
+                QIcon icon8(QApplication::applicationDirPath() +"./animation/3/8.png");
+                QIcon icon9(QApplication::applicationDirPath() +"./animation/3/9.png");
+                QIcon icon10(QApplication::applicationDirPath() +"./animation/3/10.png");
+                QIcon icon11(QApplication::applicationDirPath() +"./animation/3/11.png");
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon1); setItem( i+l, j, item1 );waitMS(10);cell[i+l][j]=-color;
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon2); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon3); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon4); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon5); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon6); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon7); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon8); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon9); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon10); setItem( i+l, j, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon11); setItem( i+l, j, item1 );waitMS(10);
+                }
+            }
+        }
+        else
+
+            if(color == 1 ||color == -1){
+                QIcon icon1(QApplication::applicationDirPath() +"./animation/2/1.png");
+                QIcon icon2(QApplication::applicationDirPath() +"./animation/2/2.png");
+                QIcon icon3(QApplication::applicationDirPath() +"./animation/2/3.png");
+                QIcon icon4(QApplication::applicationDirPath() +"./animation/2/4.png");
+                QIcon icon5(QApplication::applicationDirPath() +"./animation/2/5.png");
+                QIcon icon6(QApplication::applicationDirPath() +"./animation/2/6.png");
+                QIcon icon7(QApplication::applicationDirPath() +"./animation/2/7.png");
+                QIcon icon8(QApplication::applicationDirPath() +"./animation/2/8.png");
+                QIcon icon9(QApplication::applicationDirPath() +"./animation/2/9.png");
+                QIcon icon10(QApplication::applicationDirPath() +"./animation/2/10.png");
+                QIcon icon11(QApplication::applicationDirPath() +"./animation/2/11.png");
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon1); setItem( i, j+l, item1 );waitMS(10);cell[i][j+l]=-color;
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon2); setItem( i, j+l, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon3); setItem( i, j+l, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon4); setItem( i, j+l, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon5); setItem( i, j+l, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon6); setItem( i, j+l, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon7); setItem( i, j+l, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon8); setItem( i, j+l, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon9); setItem( i, j+l, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon10); setItem( i, j+l, item1 );waitMS(10);
+                }
+                for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                item1->setIcon(icon11); setItem( i, j+l, item1 );waitMS(10);
+                }
+            }            
+       else if(color == 2||color == -2){
+                     QIcon icon1(QApplication::applicationDirPath() +"./animation/1/1.png");
+                     QIcon icon2(QApplication::applicationDirPath() +"./animation/1/2.png");
+                     QIcon icon3(QApplication::applicationDirPath() +"./animation/1/3.png");
+                     QIcon icon4(QApplication::applicationDirPath() +"./animation/1/4.png");
+                     QIcon icon5(QApplication::applicationDirPath() +"./animation/1/5.png");
+                     QIcon icon6(QApplication::applicationDirPath() +"./animation/1/6.png");
+                     QIcon icon7(QApplication::applicationDirPath() +"./animation/1/7.png");
+                     QIcon icon8(QApplication::applicationDirPath() +"./animation/1/8.png");
+                     QIcon icon9(QApplication::applicationDirPath() +"./animation/1/9.png");
+                     QIcon icon10(QApplication::applicationDirPath() +"./animation/1/10.png");
+                     QIcon icon11(QApplication::applicationDirPath() +"./animation/1/11.png");
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon1); setItem( i, j+l, item1 );waitMS(10);cell[i][j+l]=-color;
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon2); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon3); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon4); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon5); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon6); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon7); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon8); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon9); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon10); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon11); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                 }
+       else if(color == 3||color == -3){
+                     QIcon icon1(QApplication::applicationDirPath() +"./animation/4/1.png");
+                     QIcon icon2(QApplication::applicationDirPath() +"./animation/4/2.png");
+                     QIcon icon3(QApplication::applicationDirPath() +"./animation/4/3.png");
+                     QIcon icon4(QApplication::applicationDirPath() +"./animation/4/4.png");
+                     QIcon icon5(QApplication::applicationDirPath() +"./animation/4/5.png");
+                     QIcon icon6(QApplication::applicationDirPath() +"./animation/4/6.png");
+                     QIcon icon7(QApplication::applicationDirPath() +"./animation/4/7.png");
+                     QIcon icon8(QApplication::applicationDirPath() +"./animation/4/8.png");
+                     QIcon icon9(QApplication::applicationDirPath() +"./animation/4/9.png");
+                     QIcon icon10(QApplication::applicationDirPath() +"./animation/4/10.png");
+                     QIcon icon11(QApplication::applicationDirPath() +"./animation/4/11.png");
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon1); setItem( i, j+l, item1 );waitMS(10);cell[i][j+l]=-color;
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon2); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon3); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon4); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon5); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon6); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon7); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon8); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon9); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon10); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon11); setItem( i, j+l, item1 );waitMS(10);
+                     }
+
+                 }
+       else if(color == 4||color == -4){
+                     QIcon icon1(QApplication::applicationDirPath() +"./animation/3/1.png");
+                     QIcon icon2(QApplication::applicationDirPath() +"./animation/3/2.png");
+                     QIcon icon3(QApplication::applicationDirPath() +"./animation/3/3.png");
+                     QIcon icon4(QApplication::applicationDirPath() +"./animation/3/4.png");
+                     QIcon icon5(QApplication::applicationDirPath() +"./animation/3/5.png");
+                     QIcon icon6(QApplication::applicationDirPath() +"./animation/3/6.png");
+                     QIcon icon7(QApplication::applicationDirPath() +"./animation/3/7.png");
+                     QIcon icon8(QApplication::applicationDirPath() +"./animation/3/8.png");
+                     QIcon icon9(QApplication::applicationDirPath() +"./animation/3/9.png");
+                     QIcon icon10(QApplication::applicationDirPath() +"./animation/3/10.png");
+                     QIcon icon11(QApplication::applicationDirPath() +"./animation/3/11.png");
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon1); setItem( i, j+l, item1 );waitMS(10);cell[i][j+l]=-color;
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon2); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon3); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon4); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon5); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon6); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon7); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon8); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon9); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon10); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                     for(int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();
+                     item1->setIcon(icon11); setItem( i, j+l, item1 );waitMS(10);
+                     }
+                 }
     }
-    wait250ms();
+//if(left==true){
+//         if(cell[i][j] == 1 || cell[i][j] == -1){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(pix1);item1->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));setItem( i+l, j, item1 ); cell[i+l][j]=-1;}}
+//    else if(cell[i][j] == 2 || cell[i][j] == -2){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconRm);item1->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));setItem( i+l, j, item1 );cell[i+l][j]=-2;}}
+//    else if(cell[i][j] == 3 || cell[i][j] == -3){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconYm);item1->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));setItem( i+l, j, item1 );cell[i+l][j]=-3;}}
+// }
+// else
+//    {
+//         if(cell[i][j] == 1 || cell[i][j] == -1){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(pix1);item1->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));setItem( i, j+l, item1 );cell[i][j+l]=-1;}}
+//     else if(cell[i][j] == 2 || cell[i][j] == -2){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconRm);item1->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));setItem( i, j+l, item1 );cell[i][j+l]=-2;}}
+//    else if(cell[i][j] == 3 || cell[i][j] == -3){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconYm);item1->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));setItem( i, j+l, item1 );cell[i][j+l]=-3;}}
+//  }
+//waitMS(2380);
 
 
 
-    //Delete();
+
 }
 
+
+
+//Удаление шариков(замена на пустые клетки)
 void Table::Delete(){
 
 
@@ -456,25 +861,32 @@ void Table::Down()
                     int random =rand() % Colors +1;
                     if (random == 1)
                     {
-                        cell[0][j]=1;
-                        QIcon iconB(":icon/1.png");
+                        cell[0][j]=1;                        
+                        QIcon iconB(":icon/11.png");
                         item->setIcon(iconB);
                         item->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));
                      }
-                    else if (random == 2)
+               else if (random == 2)
                     {
                         cell[0][j]=2;
-                        QIcon iconR(":icon/2.png");
+                        QIcon iconR(":icon/10.png");
                         item->setIcon(iconR);
                         item->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));
-                      }
-                  else if (random == 3)
+                    }
+               else if (random == 3)
                    {
                         cell[0][j]=3;
-                        QIcon iconY(":icon/3.png");
-                        item->setIcon(iconY);
+                        QIcon iconP(":icon/13.png");
+                        item->setIcon(iconP);
                         item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
-                       }
+                   }
+                else if (random == 4)
+                   {
+                        cell[0][j]=4;
+                        QIcon iconG(":icon/12.png");
+                        item->setIcon(iconG);
+                        item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+                    }
                       setItem(0, j, item );
 
                 }

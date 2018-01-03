@@ -1,12 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>icon/1.png</file>
-        <file>icon/2.png</file>
-        <file>icon/3.png</file>
-        <file>icon/1--.png</file>
-        <file>icon/2--.png</file>
-        <file>icon/3--.png</file>
         <file>texture/Anime boy.png</file>
         <file>texture/fon(2).png</file>
+        <file>icon/10.png</file>
+        <file>icon/11.png</file>
+        <file>icon/12.png</file>
+        <file>icon/13.png</file>
     </qresource>
 </RCC>

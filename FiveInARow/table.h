@@ -20,15 +20,17 @@ class Table: public QTableWidget
     int Old_Row=-1;
     int Old_Column=-1;    
     int static const RowAndColumn = 10;
-    int unsigned Colors = 3;
+    int unsigned Colors = 4;
     int cell[RowAndColumn+4][RowAndColumn+4];
-    int Steps=0;
-    int const ALFAforBackgraound = 20;
+    int const ALFAforBackgraound = 0;
+
+    int Steps=0;    
     float Score=0.;
     float StepMultiplicationFactor = 1.;
-    float PlusToScoreNow=0;
-    bool HaveFiveOrMore;
+    float PlusToScoreNow=0;    
     int PlusToScore=50;
+
+    bool HaveFiveOrMore;
     void wait250ms();
     void waitMS(int ms);
     void animationWillBeDeleted(int i,int j,bool left,int N);
