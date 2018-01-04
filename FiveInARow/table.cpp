@@ -42,9 +42,8 @@ QIcon iconG(":icon/12.png");
 //Подключение Ходов,Счета,"+",прибавление счета
 connect(this,&Table::ShowStep,(Widget*)this->parent(),&Widget::stepsChanged);
 connect(this,&Table::ShowScore,(Widget*)this->parent(),&Widget::ScoreChanged);
-
-
 connect(this,&Table::ShowPlusToScoreNow,(Widget*)this->parent(),&Widget::PlusToScoreNowChanged);
+
 
 
 srand(time(NULL));
@@ -135,7 +134,7 @@ for (int i = 0; i < RowAndColumn; i++)
 
 //Клик мыши и смена элементов(полная)
 void Table::mousePressEvent(QMouseEvent *event)
-{
+{    
     QIcon iconB(":icon/11.png");
     QIcon iconR(":icon/10.png");
     QIcon iconP(":icon/13.png");
@@ -409,13 +408,7 @@ ShowPlusToScoreNow(PlusToScoreNow);
 
 void Table::animationWillBeDeleted(int i,int j,bool left,int N){
     HaveFiveOrMore=true;
-
-
-
-
     int color = cell[i][j];
-
-
     {
         if(left==true)
         {
@@ -890,7 +883,7 @@ void Table::Down()
                       setItem(0, j, item );
 
                 }
-                wait250ms();
+                waitMS(150);
                 }
 
         }
