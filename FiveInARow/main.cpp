@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     //w.setStyleSheet("border-image: url(:/icon/6.jpg)");
 
 
-    w.setWindowTitle("FiR Pre-Beta 0180104.1");
+    w.setWindowTitle("FiR Pre-Beta 0180104.4");
     w.show();
 
 
