@@ -5,7 +5,7 @@
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 #include <qapplication.h>
-
+#include <QPushButton>
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent)
@@ -14,13 +14,12 @@ Widget::Widget(QWidget *parent) :
 
 
 
-setFixedSize(1024,720);
-
 
 
 Table *table = new Table (this);
 
 
+setFixedSize(1024,720);
 
 
 
@@ -41,6 +40,11 @@ m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES 
 m_PlaylistFon->setPlaybackMode(QMediaPlaylist::Random );
 m_Fon->play();
 
+//Кнопка "Настроки"
+QPushButton *btnSettings = new QPushButton("Настройки", this);
+btnSettings->resize(100,25);
+btnSettings->move(900, 680);
+btnSettings->show();
 
 
 //Изображение справа

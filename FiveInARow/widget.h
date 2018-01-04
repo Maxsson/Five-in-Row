@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
-
+#include <QPushButton>
 namespace Ui {
 class Widget;
 }
