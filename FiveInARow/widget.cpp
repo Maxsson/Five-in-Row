@@ -23,8 +23,7 @@ Table *table = new Table (this);
 setFixedSize(1024,720);
 
 
-//Музыка
-Music(true);
+
 
 
 //Кнопка "Настроки"
@@ -35,8 +34,10 @@ CBMusic->setChecked(true);
 CBMusic->show();
 
 //Управление музыкой
-connect(CBMusic,SIGNAL(clicked(bool)) ,this,SLOT (Music(bool)));
 
+connect(CBMusic,SIGNAL(clicked(bool)) ,this,SLOT (Music(bool)));
+//Музыка
+Music(true);
 
 
 //Изображение справа
@@ -146,13 +147,14 @@ void Widget::Music(bool SoundsMusic){
     m_Fon = new QMediaPlayer(this);
     m_PlaylistFon = new QMediaPlaylist(m_Fon);
     m_Fon->setPlaylist(m_PlaylistFon);
+    m_PlaylistFon->setPlaybackMode(QMediaPlaylist::Random );
     //Плейлист относительный.
     bool *i;
     short size = 7;
-    i = new bool [ size ];
+    i = new bool [ size+1 ];
     for(int  a=0;a<size;a++)
     i[a]=false;
-    while(i[0]==false || i[1]==false || i[2]==false || i[3]==false || i[4]==false || i[5]==false|| i[6]==false )
+    //while(i[0]==false || i[1]==false || i[2]==false || i[3]==false || i[4]==false || i[5]==false|| i[6]==false )
     {
     short rnd=rand() % 7;
     if(i[0]==false && rnd==0){i[0]=true;m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - 8. Dirt.wav"));}
@@ -163,7 +165,7 @@ void Widget::Music(bool SoundsMusic){
     if(i[5]==false && rnd==5){i[5]=true;m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - Sixteen.wav"));}
     if(i[6]==false && rnd==6){i[6]=true;m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - TheHealingFields.mp3"));}
     }
-    m_PlaylistFon->setPlaybackMode(QMediaPlaylist::Random );
+
     m_Fon->play();
     }
     else
