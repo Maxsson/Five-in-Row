@@ -143,7 +143,8 @@ void Widget::ScoreChanged(float newScore)
 
 void Widget::Music(bool SoundsMusic){
     //Музыка
-    if(SoundsMusic==true){
+
+    /*if(SoundsMusic==true){
     m_Fon = new QMediaPlayer(this);
     m_PlaylistFon = new QMediaPlaylist(m_Fon);
     m_Fon->setPlaylist(m_PlaylistFon);
@@ -154,7 +155,7 @@ void Widget::Music(bool SoundsMusic){
     i = new bool [ size+1 ];
     for(int  a=0;a<size;a++)
     i[a]=false;
-    //while(i[0]==false || i[1]==false || i[2]==false || i[3]==false || i[4]==false || i[5]==false|| i[6]==false )
+    while(i[0]==false || i[1]==false || i[2]==false || i[3]==false || i[4]==false || i[5]==false|| i[6]==false )
     {
     short rnd=rand() % 7;
     if(i[0]==false && rnd==0){i[0]=true;m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - 8. Dirt.wav"));}
@@ -170,6 +171,22 @@ void Widget::Music(bool SoundsMusic){
     }
     else
         m_Fon->stop();
+        */
+
+
+     m_Fon = new QMediaPlayer(this);
+     m_PlaylistFon = new QMediaPlaylist(m_Fon);
+     m_Fon->setPlaylist(m_PlaylistFon);
+     //Плейлист относительный.
+     m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - 8. Dirt.wav"));
+     m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/Bones  Drip-133 - WeWillBeRightHere.wav"));
+     m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/Bones  Dylan Ross - TheIvy.wav"));
+     m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - Kale (Feat. Eddy Baker).mp3"));
+     m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - PleaseHangUpAndTryAgain.wav"));
+     m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - Sixteen.wav"));
+     m_PlaylistFon->addMedia(QUrl(QApplication::applicationDirPath() +"./music/BONES - TheHealingFields.mp3"));
+     m_PlaylistFon->setPlaybackMode(QMediaPlaylist::Random );
+     m_Fon->play();
 }
 
 

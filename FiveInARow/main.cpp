@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setLibraryPaths(paths);
 
     QApplication a(argc, argv);
-    a.addLibraryPath("C:/customPath/plugins");
+    a.addLibraryPath(a.applicationDirPath()+"/plugins");
     Widget w;
 
 
