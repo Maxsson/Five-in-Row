@@ -6,8 +6,7 @@
 #include <QObject>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
-#include <QPushButton>
-#include <QCheckBox>
+
 namespace Ui {
 class Widget;
 }
@@ -21,7 +20,6 @@ public:
     ~Widget();
 
 
-
 private:
     Ui::Widget *ui;
     QLabel *Steps;
@@ -32,22 +30,15 @@ private:
     QLabel *RightImg;
     QMediaPlayer * m_Fon;
     QMediaPlaylist * m_PlaylistFon;
-    QCheckBox  *CBMusic;
 
 
 
 
-
-
-signals:void MusicChanged(bool SoundsMusic);
 
 public  slots:
     void stepsChanged(int newSteps);
     void ScoreChanged(float newScore);
     void PlusToScoreNowChanged(float newPlusToScoreNow);
-    void Music(bool On);
-
-
 
 
 
