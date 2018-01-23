@@ -15,6 +15,7 @@ Table::Table(QWidget *parent):QTableWidget(parent)
 setRowCount(RowAndColumn);
 setColumnCount(RowAndColumn);
 setFixedSize(1024,720);
+
 //Картинка background
 setStyleSheet("border-image: url(:/texture/fon(2).png)");
 
@@ -42,9 +43,8 @@ QIcon iconG(":icon/12.png");
 //Подключение Ходов,Счета,"+",прибавление счета
 connect(this,&Table::ShowStep,(Widget*)this->parent(),&Widget::stepsChanged);
 connect(this,&Table::ShowScore,(Widget*)this->parent(),&Widget::ScoreChanged);
-
-
 connect(this,&Table::ShowPlusToScoreNow,(Widget*)this->parent(),&Widget::PlusToScoreNowChanged);
+
 
 
 srand(time(NULL));
@@ -135,7 +135,7 @@ for (int i = 0; i < RowAndColumn; i++)
 
 //Клик мыши и смена элементов(полная)
 void Table::mousePressEvent(QMouseEvent *event)
-{
+{    
     QIcon iconB(":icon/11.png");
     QIcon iconR(":icon/10.png");
     QIcon iconP(":icon/13.png");
@@ -153,8 +153,6 @@ void Table::mousePressEvent(QMouseEvent *event)
                     Old_Row=itemchange->row();
                     Old_Column=itemchange->column();
                     //qDebug().nospace()<<Old_Row<<Old_Column;
-
-
 
                      //QPixmap pixmapY = iconY.pixmap(QSize(55, 55));
                     color = cell[Old_Row][Old_Column];//1-blue 2-Red 3-purple
@@ -336,7 +334,6 @@ void Table::CheackCross(int i, int j,bool left, int N)
 
 }
 
-
 //Проверка на пять в ряд и удаление
 //UPD:Проверка на >=5 и удаление
 void Table::CheckFive()
@@ -409,13 +406,7 @@ ShowPlusToScoreNow(PlusToScoreNow);
 
 void Table::animationWillBeDeleted(int i,int j,bool left,int N){
     HaveFiveOrMore=true;
-
-
-
-
     int color = cell[i][j];
-
-
     {
         if(left==true)
         {
@@ -811,12 +802,8 @@ void Table::animationWillBeDeleted(int i,int j,bool left,int N){
 
 }
 
-
-
 //Удаление шариков(замена на пустые клетки)
 void Table::Delete(){
-
-
     for (int i = 0; i < RowAndColumn; i++)
         for (int j = 0; j < RowAndColumn; j++){
             if(cell[i][j]<0){
@@ -825,7 +812,6 @@ void Table::Delete(){
             setItem( i, j, item );
             cell[i][j]= 0;
             }
-
         }
     Down();
     }
@@ -888,16 +874,13 @@ void Table::Down()
                         item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
                     }
                       setItem(0, j, item );
-
                 }
-                wait250ms();
+                waitMS(150);
                 }
-
         }
     //Увеличенный коэфицент прибавки к очкам при исчезновение больше 1 раза.
     if(HaveFiveOrMore==true)
           CheckFive();
-
 }
 
 
