@@ -70,7 +70,7 @@ for (int i = 0; i < RowAndColumn; i++)
          {
 
                 item->setIcon(iconB);
-                item->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));
+                //item->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));
           }
         else   {
              cell[i][j]=0;
@@ -86,7 +86,7 @@ for (int i = 0; i < RowAndColumn; i++)
         {
 
             item->setIcon(iconR);
-            item->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));
+            //item->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));
         }
          else   {
               cell[i][j]=0;
@@ -102,7 +102,7 @@ for (int i = 0; i < RowAndColumn; i++)
         {
 
             item->setIcon(iconP);
-            item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+            //item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
         }
          else   {
               cell[i][j]=0;
@@ -118,7 +118,7 @@ for (int i = 0; i < RowAndColumn; i++)
           {
 
               item->setIcon(iconG);
-              item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+              //item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
           }
            else   {
                 cell[i][j]=0;
@@ -161,7 +161,7 @@ void Table::mousePressEvent(QMouseEvent *event)
                         for(int a=65;a>55;a--){
                           QPixmap pixmapB = iconB.pixmap(QSize(a, a));
                         item->setIcon(pixmapB);
-                        item->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));
+                        //item->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));
                         waitMS(15);
                         }
                         }
@@ -170,7 +170,7 @@ void Table::mousePressEvent(QMouseEvent *event)
                         for(int a=65;a>55;a--){
                             QPixmap pixmapR = iconR.pixmap(QSize(a, a));
                         item->setIcon(pixmapR);
-                        item->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));
+                        //item->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));
                         waitMS(15);
                         }
                     }
@@ -179,7 +179,7 @@ void Table::mousePressEvent(QMouseEvent *event)
                         for(int a=65;a>55;a--){
                             QPixmap pixmapP = iconP.pixmap(QSize(a, a));
                         item->setIcon(pixmapP);
-                        item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+                        //item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
                         waitMS(15);
                         }
                     }
@@ -188,7 +188,7 @@ void Table::mousePressEvent(QMouseEvent *event)
                         for(int a=65;a>55;a--){
                             QPixmap pixmapG = iconG.pixmap(QSize(a, a));
                         item->setIcon(pixmapG);
-                        item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+                        //item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
                         waitMS(15);
                         }
                     }
@@ -200,26 +200,30 @@ void Table::mousePressEvent(QMouseEvent *event)
    {
        if (event->button()==Qt::LeftButton)
        {
-           if ((Old_Row != itemchange->row()) || (Old_Column != itemchange->column()))
+           //if ((Old_Row != itemchange->row()) || (Old_Column != itemchange->column()))
+           if ((Old_Row == itemchange->row()+1 && Old_Column == itemchange->column())
+             ||(Old_Row == itemchange->row()-1 && Old_Column == itemchange->column())
+             ||(Old_Column == itemchange->column()+1 && Old_Row == itemchange->row())
+             ||(Old_Column == itemchange->column()-1 && Old_Row == itemchange->row()))
            {
                if(color  == 1) {
                    item->setIcon(iconB);
-                   item->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));
+                   //item->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));
                }
                else if (color == 2)
                {
                    item->setIcon(iconR);
-                   item->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));
+                   //item->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));
                }
                else if (color == 3)
                {
                    item->setIcon(iconP);
-                   item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+                   //item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
                }
                else if (color == 4)
                {
                    item->setIcon(iconG);
-                   item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+                   //item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
                }
                 setItem(Old_Row, Old_Column, item );
 
@@ -227,9 +231,9 @@ void Table::mousePressEvent(QMouseEvent *event)
                this->item(Old_Row,Old_Column)->setIcon(itemchange->icon());
                itemchange->setIcon(icon1);
 
-               QColor color1=this->item(Old_Row,Old_Column)->backgroundColor();               
-               this->item(Old_Row,Old_Column)->setBackgroundColor(itemchange->backgroundColor());               
-               itemchange->setBackgroundColor(color1);
+               //QColor color1=this->item(Old_Row,Old_Column)->backgroundColor();
+               //his->item(Old_Row,Old_Column)->setBackgroundColor(itemchange->backgroundColor());
+               //itemchange->setBackgroundColor(color1);
 
                int NewRow = itemchange->row();
                int NewColumn =itemchange->column();
@@ -246,9 +250,16 @@ void Table::mousePressEvent(QMouseEvent *event)
             }
            else
            {
+               if (color == 1){item->setIcon(iconB);}
+          else if (color == 2){item->setIcon(iconR);}
+          else if (color == 3){item->setIcon(iconP);}
+          else if (color == 4){item->setIcon(iconG);}
+               setItem(Old_Row, Old_Column, item );
+
            Old_Row=-1;
            Old_Column=-1;
            }
+
        }
    }
 }
@@ -597,7 +608,7 @@ void Table::animationWillBeDeleted(int i,int j,bool left,int N){
             }
         }
         else
-
+        {
             if(color == 1 ||color == -1){
                 QIcon icon1(QApplication::applicationDirPath() +"./animation/2/1.png");
                 QIcon icon2(QApplication::applicationDirPath() +"./animation/2/2.png");
@@ -784,6 +795,7 @@ void Table::animationWillBeDeleted(int i,int j,bool left,int N){
                      }
                  }
     }
+    }
 //if(left==true){
 //         if(cell[i][j] == 1 || cell[i][j] == -1){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(pix1);item1->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));setItem( i+l, j, item1 ); cell[i+l][j]=-1;}}
 //    else if(cell[i][j] == 2 || cell[i][j] == -2){for (int l=0; l<N; l++){QTableWidgetItem *item1 = new QTableWidgetItem();item1->setIcon(iconRm);item1->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));setItem( i+l, j, item1 );cell[i+l][j]=-2;}}
@@ -808,7 +820,7 @@ void Table::Delete(){
         for (int j = 0; j < RowAndColumn; j++){
             if(cell[i][j]<0){
             QTableWidgetItem *item = new QTableWidgetItem();
-            item->setBackgroundColor(QColor(90, 0, 157,140));
+            item->setBackgroundColor(QColor(90, 0, 157,70));
             setItem( i, j, item );
             cell[i][j]= 0;
             }
@@ -823,7 +835,7 @@ void Table::Down()
     for (int i = 0; i < RowAndColumn; i++)
         for (int j = 0; j < RowAndColumn; j++)
         {
-            if (this->item(i,j)->backgroundColor()==QColor(90, 0, 157,140))
+            if (this->item(i,j)->backgroundColor()==QColor(90, 0, 157,70))
             {
                 int p=i;
                 while (p>0)
@@ -832,8 +844,8 @@ void Table::Down()
                 QIcon icon1=this->item(p-1,j)->icon();
                 item->setIcon(icon1);
 
-                QColor color1=this->item(p-1,j)->backgroundColor();
-                item->setBackgroundColor(color1);
+                //QColor color1=this->item(p-1,j)->backgroundColor();
+                //item->setBackgroundColor(color1);
 
                 cell[p][j]=cell[p-1][j];
                 setItem(p,j,item);
@@ -850,32 +862,32 @@ void Table::Down()
                         cell[0][j]=1;                        
                         QIcon iconB(":icon/11.png");
                         item->setIcon(iconB);
-                        item->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));
+                        //item->setBackgroundColor(QColor(0,0,255,ALFAforBackgraound));
                      }
                else if (random == 2)
                     {
                         cell[0][j]=2;
                         QIcon iconR(":icon/10.png");
                         item->setIcon(iconR);
-                        item->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));
+                        //item->setBackgroundColor(QColor(255,0,0,ALFAforBackgraound));
                     }
                else if (random == 3)
                    {
                         cell[0][j]=3;
                         QIcon iconP(":icon/13.png");
                         item->setIcon(iconP);
-                        item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+                        //item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
                    }
                 else if (random == 4)
                    {
                         cell[0][j]=4;
                         QIcon iconG(":icon/12.png");
                         item->setIcon(iconG);
-                        item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
+                        //item->setBackgroundColor(QColor(255, 255, 0,ALFAforBackgraound));
                     }
                       setItem(0, j, item );
                 }
-                waitMS(150);
+                waitMS(185);
                 }
         }
     //Увеличенный коэфицент прибавки к очкам при исчезновение больше 1 раза.
